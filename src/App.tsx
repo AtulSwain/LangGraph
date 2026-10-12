@@ -2,6 +2,7 @@ import { Routes, Route, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import Layout from './components/Layout'
 import ErrorBoundary from './components/ErrorBoundary'
+import { useDeployCheck } from './components/useDeployCheck'
 // Pages are bundled eagerly: navigation never waits on a network request and
 // can't break when a redeploy renames lazily-loaded chunk files.
 import Home from './pages/Home'
@@ -21,6 +22,7 @@ import NotFound from './pages/NotFound'
 
 export default function App() {
   const location = useLocation()
+  useDeployCheck()
   const top = location.pathname.split('/')[1] ?? ''
   return (
     <Layout>

@@ -1,6 +1,6 @@
 import { Canvas, type CanvasProps } from '@react-three/fiber'
 import { PerformanceMonitor } from '@react-three/drei'
-import { Suspense, useState, type CSSProperties, type ReactNode } from 'react'
+import { Suspense, useEffect, useState, type CSSProperties, type ReactNode } from 'react'
 import { useInView } from './useInView'
 
 /**
@@ -14,14 +14,20 @@ export default function SmartCanvas({
   children,
   ...canvasProps
 }: { className?: string; style?: CSSProperties; overlay?: ReactNode; children: ReactNode } & Omit<CanvasProps, 'children'>) {
-  const [ref, inView] = useInView<HTMLDivElement>()
+  const [ref, inView] = useInView<HTMLDivElement>('200px')
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => {
+    if (inView) setMounted(true)
+  }, [inView])
   const [dpr, setDpr] = useState(Math.min(1.5, typeof window !== 'undefined' ? window.devicePixelRatio : 1))
   return (
     <div ref={ref} className={className} style={style}>
+      {mounted && (
       <Canvas dpr={dpr} frameloop={inView ? 'always' : 'never'} gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }} {...canvasProps}>
         <PerformanceMonitor onDecline={() => setDpr(1)} flipflops={2} onFallback={() => setDpr(0.75)} />
         <Suspense fallback={null}>{children}</Suspense>
       </Canvas>
+      )}
       {overlay}
     </div>
   )
