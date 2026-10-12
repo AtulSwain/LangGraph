@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
+import { Link, useNavigate } from '../components/nav'
 import { AnimatePresence, motion } from 'framer-motion'
 import { CONCEPTS, MODULES, conceptById } from '../data/concepts'
 import { GRAPHS } from '../data/graphs'
@@ -63,7 +64,15 @@ export default function Learn() {
   }, [next, prev, nav])
 
   const completeAndNext = () => {
-    if (!isDone) setDone((d) => [...d, concept.id])
+    if (!isDone) {
+      const updated = [...done, concept.id]
+      setDone(updated)
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(updated)) // save now: the next page is a full load
+      } catch {
+        /* storage unavailable */
+      }
+    }
     if (next) nav(`/learn/${next.id}`)
   }
 

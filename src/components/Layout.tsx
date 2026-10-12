@@ -1,4 +1,5 @@
-import { NavLink, Link, useLocation, useNavigate } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
+import { NavLink, Link, useNavigate } from './nav'
 import { AnimatePresence, motion, useScroll, useSpring } from 'framer-motion'
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import Icon from './Icon'

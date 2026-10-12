@@ -16,7 +16,7 @@ export function useDeployCheck() {
       if (import.meta.env.DEV || Date.now() - lastCheck.current < 15_000) return
       lastCheck.current = Date.now()
       try {
-        const res = await fetch(`./version.json?t=${Date.now()}`, { cache: 'no-store' })
+        const res = await fetch(`${import.meta.env.BASE_URL}version.json?t=${Date.now()}`, { cache: 'no-store' })
         if (!res.ok) return
         const { buildId } = (await res.json()) as { buildId?: string }
         if (buildId && buildId !== __BUILD_ID__) {

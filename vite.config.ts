@@ -15,7 +15,8 @@ export default defineConfig({
       },
     },
   ],
-  base: './',
+  // Absolute base: every route is its own HTML file (e.g. /LangGraph/learn/state/index.html).
+  base: process.env.BASE_PATH ?? '/LangGraph/',
   build: {
     chunkSizeWarningLimit: 1600,
     rollupOptions: {
