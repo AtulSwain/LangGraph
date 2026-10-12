@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { GLOSSARY, CHEATSHEET } from '../data/glossary'
 import { SectionHead } from '../components/Reveal'
@@ -8,14 +9,15 @@ const CATS = ['All', 'Core', 'Control', 'Persistence', 'HITL', 'Runtime', 'Ecosy
 const CAT_COLOR: Record<string, string> = { Core: 'cyan', Control: 'violet', Persistence: 'green', HITL: 'pink', Runtime: 'amber', Ecosystem: 'violet', LangChain: 'green' }
 
 export default function Glossary() {
-  const [q, setQ] = useState('')
+  const [params] = useSearchParams()
+  const [q, setQ] = useState(params.get('q') ?? '')
   const [cat, setCat] = useState<(typeof CATS)[number]>('All')
   const terms = GLOSSARY.filter((t) => (cat === 'All' || t.cat === cat) && (t.term + ' ' + t.def).toLowerCase().includes(q.toLowerCase()))
   return (
     <div className="page container">
       <SectionHead eyebrow="Reference" title={<>Cheatsheet & <span className="grad-text">glossary</span></>} sub="Everything at a glance. Search the glossary, then grab copy-ready snippets for the most common LangGraph tasks." />
 
-      <h3>⚡ API cheatsheet</h3>
+      <h2 style={{ fontSize: '2rem' }}>API cheatsheet</h2>
       <div className="grid grid-3" style={{ marginBottom: 56 }}>
         {CHEATSHEET.map((c) => (
           <div key={c.title}>
@@ -25,7 +27,7 @@ export default function Glossary() {
         ))}
       </div>
 
-      <h3>📖 Glossary</h3>
+      <h2 style={{ fontSize: '2rem' }}>Glossary</h2>
       <input className="input" placeholder={`Search ${GLOSSARY.length} terms… (e.g. reducer, thread, Send)`} value={q} onChange={(e) => setQ(e.target.value)} style={{ marginBottom: 14, fontSize: '1rem', padding: '14px 18px' }} />
       <div className="pills" style={{ marginBottom: 20 }}>
         {CATS.map((c) => (

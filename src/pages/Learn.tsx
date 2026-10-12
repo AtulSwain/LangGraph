@@ -1,12 +1,14 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { CONCEPTS, MODULES, conceptById } from '../data/concepts'
 import { GRAPHS } from '../data/graphs'
 import CodeBlock from '../components/CodeBlock'
 import Callout from '../components/Callout'
-import Graph3D, { Legend, edgeKey, type NodeKind } from '../components/Graph3D'
+import Graph3D, { Legend, type NodeKind } from '../components/Graph3D'
+import { useWalk } from '../components/useWalk'
 import Md from '../components/Md'
+import Icon from '../components/Icon'
 
 const STORAGE_KEY = 'lgu-progress-v1'
 
@@ -18,37 +20,6 @@ function loadProgress(): string[] {
   }
 }
 
-/** Walks the diagram's edges from START, lighting one hop at a time. */
-function useWalk(graphId?: string) {
-  const g = graphId ? GRAPHS[graphId] : undefined
-  const path = useMemo(() => {
-    if (!g) return [] as string[]
-    const out = ['__start__']
-    const seen = new Set(out)
-    let cur = '__start__'
-    for (let i = 0; i < 12; i++) {
-      const nexts = g.edges.filter((e) => e.from === cur)
-      if (!nexts.length) break
-      const fresh = nexts.find((e) => !seen.has(e.to)) ?? nexts[0]
-      cur = fresh.to
-      out.push(cur)
-      if (cur === '__end__') break
-      seen.add(cur)
-    }
-    return out
-  }, [g])
-  const [i, setI] = useState(0)
-  useEffect(() => {
-    setI(0)
-    if (!path.length) return
-    const t = setInterval(() => setI((x) => (x + 1) % path.length), 1300)
-    return () => clearInterval(t)
-  }, [path])
-  const active = path[i]
-  const prev = i > 0 ? path[i - 1] : undefined
-  return { active: active ? [active] : [], edges: prev ? [edgeKey(prev, active)] : [] }
-}
-
 export default function Learn() {
   const { id } = useParams()
   const nav = useNavigate()
@@ -56,6 +27,8 @@ export default function Learn() {
   const idx = CONCEPTS.findIndex((c) => c.id === concept.id)
   const [done, setDone] = useState<string[]>(loadProgress)
   const walk = useWalk(concept.diagram)
+  const [filter, setFilter] = useState('')
+  const readMins = Math.max(2, Math.round((concept.body.join(' ').split(/\s+/).length + (concept.code ? 120 : 0)) / 180))
 
   useEffect(() => {
     try {
@@ -78,6 +51,17 @@ export default function Learn() {
   const diagram = concept.diagram ? GRAPHS[concept.diagram] : undefined
   const kinds = diagram ? (Array.from(new Set(diagram.nodes.map((n) => n.kind ?? 'default'))) as NodeKind[]) : []
 
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const tag = (e.target as HTMLElement)?.tagName
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || e.metaKey || e.ctrlKey) return
+      if (e.key === 'ArrowRight' && next) nav(`/learn/${next.id}`)
+      if (e.key === 'ArrowLeft' && prev) nav(`/learn/${prev.id}`)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [next, prev, nav])
+
   const completeAndNext = () => {
     if (!isDone) setDone((d) => [...d, concept.id])
     if (next) nav(`/learn/${next.id}`)
@@ -98,12 +82,13 @@ export default function Learn() {
               {done.length}/{CONCEPTS.length} lessons · saved in this browser
             </div>
           </div>
+          <input className="input" placeholder="Filter lessons…" value={filter} onChange={(e) => setFilter(e.target.value)} style={{ marginBottom: 18 }} />
           {MODULES.map((m, mi) => (
-            <div key={m.id} className="side-group">
-              <h5 style={{ color: m.color }}>
+            <div key={m.id} className="side-group" style={{ display: CONCEPTS.some((c) => c.module === m.id && c.title.toLowerCase().includes(filter.toLowerCase())) ? undefined : 'none' }}>
+              <h5>
                 {mi + 1}. {m.title}
               </h5>
-              {CONCEPTS.filter((c) => c.module === m.id).map((c) => (
+              {CONCEPTS.filter((c) => c.module === m.id && c.title.toLowerCase().includes(filter.toLowerCase())).map((c) => (
                 <button key={c.id} className={`side-item ${c.id === concept.id ? 'active' : ''}`} onClick={() => nav(`/learn/${c.id}`)}>
                   <span className={`side-check ${done.includes(c.id) ? 'done' : ''}`}>{done.includes(c.id) ? '✓' : ''}</span>
                   <span>{c.title}</span>
@@ -124,14 +109,13 @@ export default function Learn() {
             transition={{ duration: 0.3 }}
           >
             <div className="row" style={{ marginBottom: 14 }}>
-              <span className="tag" style={{ color: mod.color, borderColor: `${mod.color}66` }}>{mod.title}</span>
-              <span className={`tag ${concept.level === 'Beginner' ? 'green' : concept.level === 'Intermediate' ? 'amber' : 'pink'}`}>{concept.level}</span>
+              <span className="tag">{mod.title}</span>
+              <span className="tag">{concept.level}</span>
               <span className="tag mono">Lesson {idx + 1} / {CONCEPTS.length}</span>
+              <span className="tag mono">{readMins} min read</span>
             </div>
-            <h1>
-              <span style={{ marginRight: 12 }}>{concept.icon}</span>
-              {concept.title}
-            </h1>
+            <div className="lesson-icon"><Icon name={concept.icon} size={26} stroke={1.25} /></div>
+            <h1>{concept.title}</h1>
             <p className="tagline">{concept.tagline}</p>
 
             <Callout type="info" title="Why it matters">
@@ -209,11 +193,12 @@ export default function Learn() {
               )}
               {!next && (
                 <Link to="/quiz" className="btn btn-primary">
-                  🏆 Take the quiz
+                  Take the quiz
                 </Link>
               )}
             </div>
 
+            <p className="dim" style={{ fontSize: '0.8rem', marginTop: 24 }}>Tip: use <span className="kbd">←</span> <span className="kbd">→</span> to move between lessons, <span className="kbd">⌘K</span> to search everything.</p>
             <div className="lesson-nav">
               {prev ? (
                 <Link to={`/learn/${prev.id}`} className="btn btn-ghost">

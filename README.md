@@ -4,22 +4,30 @@ An interactive, 3D study guide to **LangGraph** and the **LangChain** ecosystem 
 
 ## What's inside
 
+A black-and-white, editorial design with 3D visualizations throughout, ⌘K search across everything, and keyboard navigation.
+
 | Page | What you get |
 | --- | --- |
-| **Home** | 3D graph constellation hero, a live animated ReAct agent loop, why LangGraph, learning roadmap, FAQ |
-| **Study Guide** | 27 lessons in 7 modules (Foundations → Control Flow → Tools & Agents → Persistence & Memory → Human-in-the-Loop → Streaming & Runtime → Production). Each has an explanation, analogy, Python + TypeScript code, an animated 3D diagram, pitfalls and takeaways. Progress is saved in your browser. |
-| **Architecture 3D** | Clickable 3D model of the ecosystem stack (models → LangChain Core → LangChain → LangGraph → Deployment, with LangSmith as a pillar), a step-through Pregel super-step visualizer, the life of a production run, and the persistence model |
-| **Patterns** | 12 agent architectures (prompt chaining, routing, parallelization, ReAct, plan-and-execute, reflection, orchestrator-workers, supervisor, swarm, hierarchical teams, agentic RAG, human approval), each animated in 3D with how/when/pros/cons and code |
-| **Playground** | Execution simulator with checkpoints, `interrupt()` approve/reject, time travel and forking; plus a graph builder that validates your graph and generates Python & TypeScript code |
-| **LangChain** | How LangChain, LangGraph, LangSmith and the deployment platform fit together; LangChain building blocks with code; a "which should I use?" decision helper |
-| **Quiz** | 22 shuffled questions with explanations and a 3D rank trophy |
-| **Cheatsheet** | Copy-ready API snippets and a searchable glossary |
+| **Home** | 3D graph hero, a live animated ReAct loop, curriculum roadmap, what's new, FAQ |
+| **Study Guide** | 47 lessons in 9 modules: Foundations · Models & Messages · Control Flow · Tools & Agents · Persistence & Memory · Human-in-the-Loop · Streaming & Runtime · Integrations & Ecosystem · Production. Each has an explanation, analogy, Python + TypeScript code, pitfalls and takeaways, many with an animated 3D diagram. Progress is saved in your browser; ←/→ to move between lessons. |
+| **Projects** | Six complete, runnable agents: support router, parallel research assistant, SQL analyst, docs chatbot with memory, email assistant with approval, multi-agent content team |
+| **Interview Prep** | 30 questions with model answers, in list or flash-card mode |
+| **Quiz** | 40 shuffled questions with explanations and a 3D rank trophy |
+| **Architecture 3D** | Clickable 3D ecosystem stack, a Pregel super-step visualizer, the life of a production run, and the persistence model |
+| **Agent Patterns** | 12 architectures animated in 3D with how/when/pros/cons and code |
+| **Playground** | Execution simulator (checkpoints, `interrupt()`, time travel, forks) and a graph builder that validates your graph and generates Python & TypeScript |
+| **Models** | 3D provider orbit, 12 providers, and how to pick a model for each node role |
+| **LangChain Family** | How LangChain, LangGraph, LangSmith and LangSmith Deployment fit together, with building-block code and a decision helper |
+| **Compare** | LangGraph vs CrewAI, AutoGen / Microsoft Agent Framework, OpenAI Agents SDK, LlamaIndex Workflows, Pydantic AI, Google ADK and Mastra |
+| **Resources & News** | Official docs, repos, courses, a learning path and an ecosystem timeline |
+| **Cheatsheet** | Copy-ready API snippets and a searchable 74-term glossary |
 
 ## Tech stack
 
 - **React 18 + TypeScript + Vite**
 - **three.js** via **@react-three/fiber** and **@react-three/drei** for all 3D scenes
 - **Framer Motion** for page transitions and scroll reveals
+- **Lucide** line icons, Instrument Serif + Inter + JetBrains Mono typography
 - **prism-react-renderer** for syntax-highlighted, tabbed (Python/TS) code blocks
 - **React Router** (hash routing, so the build works on any static host)
 
@@ -41,10 +49,12 @@ npm run preview   # serve the production build
 ```
 src/
   components/   Graph3D (reusable 3D graph engine), CodeBlock, Callout, Layout, Reveal, Md
-  data/         concepts.ts (lessons), patterns.ts, graphs.ts (3D graph presets), quiz.ts, glossary.ts
-  pages/        Home, Learn, Architecture, Patterns, Playground, LangChain, Quiz, Glossary
+  data/         concepts.ts + conceptsExtra.ts (lessons), patterns.ts, projects.ts, knowledge.ts (models, frameworks,
+                interview, resources), graphs.ts (3D presets), quiz.ts, glossary.ts
+  pages/        Home, Learn, Projects, Interview, Quiz, Architecture, Patterns, Playground, Models,
+                LangChain, Compare, Resources, Glossary
 ```
 
-To add a lesson, append an entry to `src/data/concepts.ts`; to add a 3D diagram, add a preset to `src/data/graphs.ts` and reference it via `diagram`.
+To add a lesson, append an entry to `src/data/conceptsExtra.ts`; to add a 3D diagram, add a preset to `src/data/graphs.ts` and reference it via `diagram`.
 
 > This is an independent learning resource, not affiliated with LangChain, Inc. APIs evolve quickly — check the official docs for the latest details.

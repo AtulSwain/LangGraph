@@ -37,9 +37,9 @@ export default function CodeBlock({ code, title }: { code: CodeSample | string; 
     <div className="code-wrap">
       <div className="code-head">
         <div className="code-dots">
-          <i style={{ background: '#fb7185' }} />
-          <i style={{ background: '#fbbf24' }} />
-          <i style={{ background: '#34d399' }} />
+          <i style={{ background: '#9a9a9a' }} />
+          <i style={{ background: '#c2c2c2' }} />
+          <i style={{ background: '#f2f2f2' }} />
         </div>
         {langs.length > 1 ? (
           langs.map((l) => (
