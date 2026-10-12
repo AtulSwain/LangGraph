@@ -397,3 +397,13 @@ details.faq summary::after { color: #fff; }
 .tl-dot { position: absolute; top: -5px; left: 0; width: 9px; height: 9px; border-radius: 50%; background: #fff; }
 .res-card { display: block; color: var(--text); text-decoration: none; height: 100%; }
 .res-card:hover { text-decoration: none; }
+.contact { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: 48px; padding: 40px 0 64px; border-bottom: 1px solid var(--border); margin-bottom: 40px; }
+@media (max-width: 860px) { .contact { grid-template-columns: minmax(0, 1fr); gap: 28px; } }
+.contact-title { font-size: clamp(2.2rem, 4.5vw, 3.4rem); }
+.contact-mail { display: inline-flex !important; width: fit-content; max-width: 100%; align-items: center; gap: 10px; margin-top: 8px; padding: 12px 18px; border: 1px solid var(--border-strong); border-radius: 999px; color: #fff; text-decoration: none; font-weight: 500; word-break: break-all; }
+.contact-mail:hover { background: #fff; color: #000; }
+.contact-form { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
+.contact-status { display: flex; align-items: center; gap: 8px; margin: 14px 0 0; color: var(--text); font-size: 0.92rem; flex-wrap: wrap; }
+.footer-bottom { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 0.82rem; }
+.edu-note { color: var(--text); font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.contact-mail svg { flex: none; }
