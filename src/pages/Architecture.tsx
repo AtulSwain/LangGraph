@@ -1,8 +1,9 @@
-import { Canvas, useFrame } from '@react-three/fiber'
+import { useFrame } from '@react-three/fiber'
 import { Edges, Html, OrbitControls, Stars, Float } from '@react-three/drei'
-import { Suspense, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import * as THREE from 'three'
+import SmartCanvas from '../components/SmartCanvas'
 import { SceneLights, edgeKey } from '../components/Graph3D'
 import Graph3D from '../components/Graph3D'
 import { GRAPHS } from '../data/graphs'
@@ -271,9 +272,8 @@ export default function Architecture() {
           sub="Click a layer to explore it. Data flows upward from raw model capabilities to production deployments, while LangSmith observes every layer."
         />
         <div className="sim-layout">
-          <div className="stage" style={{ height: 560 }}>
-            <Canvas camera={{ position: [6, 4.5, 11], fov: 45 }} dpr={[1, 1.75]}>
-              <Suspense fallback={null}>
+          <SmartCanvas className="stage" style={{ height: 560 }} camera={{ position: [6, 4.5, 11], fov: 45 }} overlay={<div className="stage-hint">click a layer · drag to orbit</div>}>
+              <>
                 <SceneLights />
                 <Stars radius={60} depth={40} count={1500} factor={3} fade />
                 <Float speed={1} rotationIntensity={0.05} floatIntensity={0.2}>
@@ -286,10 +286,8 @@ export default function Architecture() {
                   </group>
                 </Float>
                 <OrbitControls enablePan={false} enableDamping minDistance={7} maxDistance={22} autoRotate autoRotateSpeed={0.4} makeDefault />
-              </Suspense>
-            </Canvas>
-            <div className="stage-hint">click a layer · drag to orbit</div>
-          </div>
+              </>
+          </SmartCanvas>
           <AnimatePresence mode="wait">
             <motion.div key={sel.id} className="card" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} style={{ borderColor: `${sel.color}66` }}>
               <span className="tag" style={{ color: sel.color, borderColor: `${sel.color}66` }}>{sel.sub}</span>

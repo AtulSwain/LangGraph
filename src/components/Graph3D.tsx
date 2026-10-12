@@ -1,6 +1,7 @@
-import { Canvas, useFrame } from '@react-three/fiber'
+import { useFrame } from '@react-three/fiber'
+import SmartCanvas from './SmartCanvas'
 import { Edges, Html, Line, OrbitControls, Stars, Float } from '@react-three/drei'
-import { useMemo, useRef, useState, Suspense } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import * as THREE from 'three'
 
 export type NodeKind = 'start' | 'end' | 'llm' | 'tool' | 'human' | 'router' | 'agent' | 'data' | 'default'
@@ -342,34 +343,30 @@ export default function Graph3D({
   children?: React.ReactNode
 } & React.ComponentProps<typeof GraphScene>) {
   return (
-    <div className="stage" style={{ height }}>
-      <Canvas camera={{ position: camera, fov: 45 }} dpr={[1, 1.75]} gl={{ antialias: true, alpha: true }}>
-        <Suspense fallback={null}>
-          <SceneLights />
-          {stars && <Stars radius={60} depth={40} count={900} factor={2.5} saturation={0} fade speed={0.4} />}
-          {floating ? (
-            <Float speed={1.2} rotationIntensity={0.12} floatIntensity={0.35}>
-              <GraphScene {...sceneProps} />
-            </Float>
-          ) : (
-            <GraphScene {...sceneProps} />
-          )}
-          {controls && (
-            <OrbitControls
-              enablePan={false}
-              enableDamping
-              autoRotate={autoRotate}
-              autoRotateSpeed={0.6}
-              minDistance={4}
-              maxDistance={24}
-              makeDefault
-            />
-          )}
-        </Suspense>
-      </Canvas>
-      {children}
-      <div className="stage-hint">drag to orbit · scroll to zoom</div>
-    </div>
+    <SmartCanvas
+      className="stage"
+      style={{ height }}
+      camera={{ position: camera, fov: 45 }}
+      overlay={
+        <>
+          {children}
+          <div className="stage-hint">drag to orbit · scroll to zoom</div>
+        </>
+      }
+    >
+      <SceneLights />
+      {stars && <Stars radius={60} depth={40} count={900} factor={2.5} saturation={0} fade speed={0.4} />}
+      {floating ? (
+        <Float speed={1.2} rotationIntensity={0.12} floatIntensity={0.35}>
+          <GraphScene {...sceneProps} />
+        </Float>
+      ) : (
+        <GraphScene {...sceneProps} />
+      )}
+      {controls && (
+        <OrbitControls enablePan={false} enableDamping autoRotate={autoRotate} autoRotateSpeed={0.6} minDistance={4} maxDistance={24} makeDefault />
+      )}
+    </SmartCanvas>
   )
 }
 

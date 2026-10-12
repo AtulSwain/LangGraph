@@ -319,8 +319,11 @@ label.lbl { font-size: 0.78rem; font-family: var(--mono); color: var(--dim); tex
 .divider { height: 1px; background: var(--border); margin: 40px 0; }
 .row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
 .spacer { flex: 1; }
-.marquee { overflow: hidden; mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); }
-.marquee-track { display: flex; gap: 14px; width: max-content; animation: marquee 40s linear infinite; }
+.marquee { overflow: hidden; position: relative; }
+.marquee::before, .marquee::after { content: ''; position: absolute; top: 0; bottom: 0; width: 12%; z-index: 1; pointer-events: none; }
+.marquee::before { left: 0; background: linear-gradient(90deg, var(--bg), transparent); }
+.marquee::after { right: 0; background: linear-gradient(270deg, var(--bg), transparent); }
+.marquee-track { display: flex; gap: 14px; width: max-content; animation: marquee 40s linear infinite; will-change: transform; }
 @keyframes marquee { to { transform: translateX(-50%); } }
 .loader { min-height: 60vh; display: grid; place-items: center; color: var(--dim); font-family: var(--mono); }
 .roadmap { position: relative; display: grid; gap: 18px; }

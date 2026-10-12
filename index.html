@@ -12,6 +12,20 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      // Watchdog: if the app never starts (e.g. a cached page points at files a newer
+      // deploy replaced), reload once with a cache-busting query to fetch fresh HTML.
+      setTimeout(function () {
+        if (window.__lguBooted) return
+        try {
+          if (sessionStorage.getItem('lgu-watchdog')) return
+          sessionStorage.setItem('lgu-watchdog', '1')
+        } catch (e) {}
+        var u = new URL(location.href)
+        u.searchParams.set('v', Date.now())
+        location.replace(u.toString())
+      }, 8000)
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
