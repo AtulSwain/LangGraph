@@ -29,7 +29,7 @@ A black-and-white, editorial design with 3D visualizations throughout, ⌘K sear
 - **Framer Motion** for page transitions and scroll reveals
 - **Lucide** line icons, Instrument Serif + Inter + JetBrains Mono typography
 - **prism-react-renderer** for syntax-highlighted, tabbed (Python/TS) code blocks
-- **React Router** (hash routing, so the build works on any static host)
+- **React Router** with real URLs: every route is pre-rendered to its own `index.html` (with its own title, description and canonical tag) by `scripts/prerender.ts`, and internal links are full page loads
 
 ## Run it
 
@@ -42,7 +42,7 @@ npm run preview   # serve the production build
 
 ## Deploy
 
-`dist/` is fully static (relative asset paths + hash routing), so it can be dropped onto GitHub Pages, Netlify, Vercel, S3, or any web server with no extra configuration.
+`dist/` is fully static. It is built for `https://atulswain.github.io/LangGraph/`; to host elsewhere set `BASE_PATH` (e.g. `/`) and `SITE_URL` when building. The build also emits `sitemap.xml`, `robots.txt` and `404.html`. Submit `sitemap.xml` in Google Search Console to get every page indexed.
 
 ## Project layout
 

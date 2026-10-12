@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Link } from 'react-router-dom'
+import { Link } from '../components/nav'
 import CodeBlock from '../components/CodeBlock'
 import Icon from '../components/Icon'
 import Callout from '../components/Callout'

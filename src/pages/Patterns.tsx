@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
+import { useNavigate } from '../components/nav'
 import { AnimatePresence, motion } from 'framer-motion'
 import { PATTERNS } from '../data/patterns'
 import { GRAPHS } from '../data/graphs'

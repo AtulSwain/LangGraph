@@ -1,7 +1,7 @@
 import { useFrame } from '@react-three/fiber'
 import { Sparkles, Stars } from '@react-three/drei'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link } from '../components/nav'
 import { motion } from 'framer-motion'
 import * as THREE from 'three'
 import SmartCanvas from '../components/SmartCanvas'
