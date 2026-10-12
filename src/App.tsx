@@ -1,59 +1,53 @@
-import { lazy, Suspense } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
-import { AnimatePresence, motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import Layout from './components/Layout'
-
-const Home = lazy(() => import('./pages/Home'))
-const Learn = lazy(() => import('./pages/Learn'))
-const Architecture = lazy(() => import('./pages/Architecture'))
-const Patterns = lazy(() => import('./pages/Patterns'))
-const Playground = lazy(() => import('./pages/Playground'))
-const LangChain = lazy(() => import('./pages/LangChain'))
-const Quiz = lazy(() => import('./pages/Quiz'))
-const Glossary = lazy(() => import('./pages/Glossary'))
-const Projects = lazy(() => import('./pages/Projects'))
-const Models = lazy(() => import('./pages/Models'))
-const Compare = lazy(() => import('./pages/Compare'))
-const Interview = lazy(() => import('./pages/Interview'))
-const Resources = lazy(() => import('./pages/Resources'))
-const NotFound = lazy(() => import('./pages/NotFound'))
+import ErrorBoundary from './components/ErrorBoundary'
+// Pages are bundled eagerly: navigation never waits on a network request and
+// can't break when a redeploy renames lazily-loaded chunk files.
+import Home from './pages/Home'
+import Learn from './pages/Learn'
+import Architecture from './pages/Architecture'
+import Patterns from './pages/Patterns'
+import Playground from './pages/Playground'
+import LangChain from './pages/LangChain'
+import Quiz from './pages/Quiz'
+import Glossary from './pages/Glossary'
+import Projects from './pages/Projects'
+import Models from './pages/Models'
+import Compare from './pages/Compare'
+import Interview from './pages/Interview'
+import Resources from './pages/Resources'
+import NotFound from './pages/NotFound'
 
 export default function App() {
   const location = useLocation()
   const top = location.pathname.split('/')[1] ?? ''
   return (
     <Layout>
-      <Suspense fallback={<div className="loader">loading graph…</div>}>
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={top}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -12 }}
-            transition={{ duration: 0.35 }}
-          >
-            <Routes location={location}>
-              <Route path="/" element={<Home />} />
-              <Route path="/learn" element={<Learn />} />
-              <Route path="/learn/:id" element={<Learn />} />
-              <Route path="/architecture" element={<Architecture />} />
-              <Route path="/patterns" element={<Patterns />} />
-              <Route path="/patterns/:id" element={<Patterns />} />
-              <Route path="/playground" element={<Playground />} />
-              <Route path="/langchain" element={<LangChain />} />
-              <Route path="/quiz" element={<Quiz />} />
-              <Route path="/glossary" element={<Glossary />} />
-              <Route path="/projects" element={<Projects />} />
-              <Route path="/projects/:id" element={<Projects />} />
-              <Route path="/models" element={<Models />} />
-              <Route path="/compare" element={<Compare />} />
-              <Route path="/interview" element={<Interview />} />
-              <Route path="/resources" element={<Resources />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </motion.div>
-        </AnimatePresence>
-      </Suspense>
+      <ErrorBoundary resetKey={location.pathname}>
+        {/* enter-only fade: the new page renders immediately, no waiting on an exit animation */}
+        <motion.div key={top} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.2 }}>
+          <Routes location={location}>
+            <Route path="/" element={<Home />} />
+            <Route path="/learn" element={<Learn />} />
+            <Route path="/learn/:id" element={<Learn />} />
+            <Route path="/architecture" element={<Architecture />} />
+            <Route path="/patterns" element={<Patterns />} />
+            <Route path="/patterns/:id" element={<Patterns />} />
+            <Route path="/playground" element={<Playground />} />
+            <Route path="/langchain" element={<LangChain />} />
+            <Route path="/quiz" element={<Quiz />} />
+            <Route path="/glossary" element={<Glossary />} />
+            <Route path="/projects" element={<Projects />} />
+            <Route path="/projects/:id" element={<Projects />} />
+            <Route path="/models" element={<Models />} />
+            <Route path="/compare" element={<Compare />} />
+            <Route path="/interview" element={<Interview />} />
+            <Route path="/resources" element={<Resources />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </motion.div>
+      </ErrorBoundary>
     </Layout>
   )
 }

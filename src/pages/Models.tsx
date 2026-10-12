@@ -1,7 +1,8 @@
-import { Canvas, useFrame } from '@react-three/fiber'
+import { useFrame } from '@react-three/fiber'
 import { Edges, Float, Html, OrbitControls, Stars } from '@react-three/drei'
-import { Suspense, useMemo, useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import * as THREE from 'three'
+import SmartCanvas from '../components/SmartCanvas'
 import { PROVIDERS, ROLES } from '../data/knowledge'
 import { SceneLights } from '../components/Graph3D'
 import CodeBlock from '../components/CodeBlock'
@@ -77,19 +78,16 @@ export default function Models() {
       />
 
       <div className="sim-layout">
-        <div className="stage" style={{ height: 500 }}>
-          <Canvas camera={{ position: [0, 8, 9], fov: 50 }} dpr={[1, 1.75]}>
-            <Suspense fallback={null}>
+        <SmartCanvas className="stage" style={{ height: 500 }} camera={{ position: [0, 8, 9], fov: 50 }} overlay={<div className="stage-hint">click a provider · drag to orbit</div>}>
+            <>
               <SceneLights />
               <Stars radius={60} depth={40} count={900} factor={2.5} saturation={0} fade />
               <Float speed={1} floatIntensity={0.3} rotationIntensity={0.05}>
                 <Orbiters sel={sel} onSel={setSel} />
               </Float>
               <OrbitControls enablePan={false} enableDamping minDistance={6} maxDistance={18} makeDefault />
-            </Suspense>
-          </Canvas>
-          <div className="stage-hint">click a provider · drag to orbit</div>
-        </div>
+            </>
+        </SmartCanvas>
         <div className="card">
           <div className="eyebrow">Provider</div>
           <h2 style={{ fontSize: '2.4rem' }}>{p.name}</h2>

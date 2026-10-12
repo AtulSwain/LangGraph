@@ -1,9 +1,10 @@
-import { Canvas, useFrame } from '@react-three/fiber'
+import { useFrame } from '@react-three/fiber'
 import { Sparkles, Stars } from '@react-three/drei'
-import { Suspense, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import * as THREE from 'three'
+import SmartCanvas from '../components/SmartCanvas'
 import { GraphScene, SceneLights, edgeKey } from '../components/Graph3D'
 import Graph3D, { Legend } from '../components/Graph3D'
 import { GRAPHS, heroConstellation } from '../data/graphs'
@@ -101,16 +102,14 @@ export default function Home() {
     <>
       {/* ───────── HERO ───────── */}
       <section className="hero">
-        <div className="hero-canvas">
-          <Canvas camera={{ position: [0, 0, 12], fov: 50 }} dpr={[1, 1.75]}>
-            <Suspense fallback={null}>
+        <SmartCanvas className="hero-canvas" camera={{ position: [0, 0, 12], fov: 50 }}>
+            <>
               <SceneLights />
               <Stars radius={80} depth={60} count={2200} factor={3} saturation={0} fade speed={0.5} />
               <Sparkles count={70} scale={[20, 12, 10]} size={1.6} speed={0.3} color="#ffffff" opacity={0.6} />
               <HeroScene />
-            </Suspense>
-          </Canvas>
-        </div>
+            </>
+        </SmartCanvas>
         <div className="hero-fade" />
         <div className="hero-scrim" />
         <div className="container hero-content">
