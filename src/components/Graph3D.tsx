@@ -1,5 +1,5 @@
 import { Canvas, useFrame } from '@react-three/fiber'
-import { Html, Line, OrbitControls, Stars, Float } from '@react-three/drei'
+import { Edges, Html, Line, OrbitControls, Stars, Float } from '@react-three/drei'
 import { useMemo, useRef, useState, Suspense } from 'react'
 import * as THREE from 'three'
 
@@ -20,15 +20,15 @@ export interface GEdge {
 }
 
 export const KIND_COLORS: Record<NodeKind, string> = {
-  start: '#34d399',
-  end: '#fb7185',
-  llm: '#a78bfa',
-  tool: '#fbbf24',
-  human: '#f472b6',
-  router: '#60a5fa',
-  agent: '#22d3ee',
-  data: '#2dd4bf',
-  default: '#c4b5fd',
+  start: '#f2f2f2',
+  end: '#9a9a9a',
+  llm: '#e8e8e8',
+  tool: '#c2c2c2',
+  human: '#d6d6d6',
+  router: '#d0d0d0',
+  agent: '#ffffff',
+  data: '#dedede',
+  default: '#d9d9d9',
 }
 
 export const KIND_LABELS: Record<NodeKind, string> = {
@@ -41,6 +41,33 @@ export const KIND_LABELS: Record<NodeKind, string> = {
   agent: 'Agent',
   data: 'Data / Retrieval',
   default: 'Node',
+}
+
+function NodeGeometry({ kind }: { kind: NodeKind }) {
+  switch (kind) {
+    case 'start':
+      return <octahedronGeometry args={[0.38, 0]} />
+    case 'end':
+      return <dodecahedronGeometry args={[0.36, 0]} />
+    case 'tool':
+      return <boxGeometry args={[0.52, 0.52, 0.52]} />
+    case 'human':
+      return <torusKnotGeometry args={[0.22, 0.08, 64, 8]} />
+    case 'router':
+      return <coneGeometry args={[0.36, 0.62, 4]} />
+    case 'agent':
+      return <icosahedronGeometry args={[0.4, 0]} />
+    case 'data':
+      return <cylinderGeometry args={[0.3, 0.3, 0.5, 8]} />
+    case 'llm':
+      return <icosahedronGeometry args={[0.4, 1]} />
+    default:
+      return <tetrahedronGeometry args={[0.42, 0]} />
+  }
+}
+
+export const KIND_GLYPH: Record<NodeKind, string> = {
+  start: '◆', end: '⬟', llm: '●', tool: '■', human: '∞', router: '▲', agent: '⬢', data: '▮', default: '△',
 }
 
 export const edgeKey = (from: string, to: string) => `${from}->${to}`
@@ -74,9 +101,8 @@ function NodeMesh({
   const ring = useRef<THREE.Mesh>(null)
   const [hover, setHover] = useState(false)
   const kind = node.kind ?? 'default'
-  const color = KIND_COLORS[kind]
-  const isTerminal = kind === 'start' || kind === 'end'
-
+  const color = '#ffffff'
+  
   useFrame((s, dt) => {
     if (!ref.current) return
     const target = active ? 1.35 + Math.sin(s.clock.elapsedTime * 6) * 0.08 : hover ? 1.18 : 1
@@ -111,27 +137,28 @@ function NodeMesh({
           document.body.style.cursor = ''
         }}
       >
-        {isTerminal ? <octahedronGeometry args={[0.36, 0]} /> : kind === 'tool' ? <boxGeometry args={[0.5, 0.5, 0.5]} /> : kind === 'human' ? <torusKnotGeometry args={[0.22, 0.08, 80, 12]} /> : kind === 'router' ? <coneGeometry args={[0.34, 0.6, 6]} /> : <icosahedronGeometry args={[0.38, 1]} />}
+        <NodeGeometry kind={kind} />
         <meshStandardMaterial
-          color={color}
-          emissive={color}
-          emissiveIntensity={active ? 1.6 : hover ? 0.9 : 0.45}
-          roughness={0.25}
-          metalness={0.4}
+          color={active ? '#ffffff' : hover ? '#2a2a2a' : '#121212'}
+          emissive="#ffffff"
+          emissiveIntensity={active ? 1.2 : hover ? 0.12 : 0.02}
+          roughness={0.35}
+          metalness={0.6}
           transparent
-          opacity={dimmed ? 0.35 : 1}
+          opacity={dimmed ? 0.35 : 0.95}
           flatShading
         />
+        <Edges color="#ffffff" threshold={12} transparent opacity={dimmed ? 0.25 : active ? 1 : 0.75} />
       </mesh>
       <mesh>
         <sphereGeometry args={[0.62, 24, 24]} />
-        <meshBasicMaterial color={color} transparent opacity={active ? 0.12 : 0.04} depthWrite={false} />
+        <meshBasicMaterial color={color} transparent opacity={active ? 0.1 : 0.02} depthWrite={false} />
       </mesh>
       <mesh ref={ring} rotation={[Math.PI / 2, 0, 0]}>
         <torusGeometry args={[0.7, 0.025, 8, 48]} />
         <meshBasicMaterial color={color} transparent opacity={0} depthWrite={false} />
       </mesh>
-      {active && <pointLight color={color} intensity={6} distance={4} />}
+      {active && <pointLight color="#ffffff" intensity={7} distance={4} />}
       {showLabel && (
         <Html center position={[0, -0.25, 0]} zIndexRange={[10, 0]} style={{ pointerEvents: 'none' }}>
           <div className={`node-label ${active ? 'active' : ''}`} style={{ opacity: dimmed ? 0.5 : 1 }}>
@@ -258,7 +285,7 @@ export function GraphScene({
     <group>
       {curves.map(({ e, curve }) => {
         const k = edgeKey(e.from, e.to)
-        const col = e.conditional ? '#fbbf24' : '#8b8fd9'
+        const col = e.conditional ? '#bdbdbd' : '#5c5c5c'
         return (
           <EdgeMesh
             key={k}
@@ -290,8 +317,8 @@ export function SceneLights() {
     <>
       <ambientLight intensity={0.35} />
       <directionalLight position={[5, 8, 6]} intensity={1.2} />
-      <pointLight position={[-6, -4, 4]} intensity={20} color="#a78bfa" distance={30} />
-      <pointLight position={[6, 4, -4]} intensity={20} color="#22d3ee" distance={30} />
+      <pointLight position={[-6, -4, 4]} intensity={20} color="#e8e8e8" distance={30} />
+      <pointLight position={[6, 4, -4]} intensity={20} color="#ffffff" distance={30} />
     </>
   )
 }
@@ -319,7 +346,7 @@ export default function Graph3D({
       <Canvas camera={{ position: camera, fov: 45 }} dpr={[1, 1.75]} gl={{ antialias: true, alpha: true }}>
         <Suspense fallback={null}>
           <SceneLights />
-          {stars && <Stars radius={60} depth={40} count={1400} factor={3} saturation={0} fade speed={0.6} />}
+          {stars && <Stars radius={60} depth={40} count={900} factor={2.5} saturation={0} fade speed={0.4} />}
           {floating ? (
             <Float speed={1.2} rotationIntensity={0.12} floatIntensity={0.35}>
               <GraphScene {...sceneProps} />
@@ -350,8 +377,8 @@ export function Legend({ kinds }: { kinds: NodeKind[] }) {
   return (
     <div className="row" style={{ gap: 8 }}>
       {kinds.map((k) => (
-        <span key={k} className="tag" style={{ background: 'rgba(6,7,20,0.75)' }}>
-          <i style={{ width: 8, height: 8, borderRadius: 99, background: KIND_COLORS[k], display: 'inline-block' }} />
+        <span key={k} className="tag" style={{ background: 'rgba(0,0,0,0.75)' }}>
+          <i style={{ fontStyle: 'normal', color: '#fff' }}>{KIND_GLYPH[k]}</i>
           {KIND_LABELS[k]}
         </span>
       ))}

@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import Graph3D, { Legend, autoLayout, edgeKey, KIND_LABELS, type GEdge, type GNode, type NodeKind } from '../components/Graph3D'
 import { GRAPHS } from '../data/graphs'
 import CodeBlock from '../components/CodeBlock'
+import Icon from '../components/Icon'
 import Callout from '../components/Callout'
 import { SectionHead } from '../components/Reveal'
 
@@ -35,7 +36,7 @@ const SCENARIOS: Scenario[] = [
   {
     id: 'react',
     name: 'ReAct agent with tools',
-    icon: '🤖',
+    icon: 'Bot',
     graph: 'react',
     desc: 'A tool-calling agent answers a two-part question. Watch messages accumulate via the add_messages reducer.',
     appendKeys: ['messages'],
@@ -67,7 +68,7 @@ for update in graph.stream(
   {
     id: 'hitl',
     name: 'Refund with human approval',
-    icon: '✋',
+    icon: 'Hand',
     graph: 'hitl',
     desc: 'The agent drafts a refund, then interrupt() pauses for you. Approve or reject — rejections loop back for a revised draft.',
     appendKeys: ['audit'],
@@ -86,7 +87,7 @@ for update in graph.stream(
     resume: (choice, n) => {
       if (choice === 'approve')
         return [
-          { node: 'execute', edges: [edgeKey('approval', 'execute')], update: { decision: 'approved', result: 'Refund issued ✅', audit: ['approved by human'] }, log: 'Command(resume="approve") → execute' },
+          { node: 'execute', edges: [edgeKey('approval', 'execute')], update: { decision: 'approved', result: 'Refund issued ✓', audit: ['approved by human'] }, log: 'Command(resume="approve") → execute' },
           { node: '__end__', edges: [edgeKey('execute', '__end__')], update: {}, log: 'Run complete.' },
         ]
       const amount = Math.max(50, 250 - 50 * (n + 1))
@@ -112,7 +113,7 @@ graph.invoke(Command(resume="approve"), config)                    # continues`,
   {
     id: 'mapreduce',
     name: 'Map-reduce with Send',
-    icon: '🧩',
+    icon: 'Puzzle',
     graph: 'mapReduce',
     desc: 'The planner creates three subjects; Send() spawns three workers in ONE super-step; operator.add merges their jokes.',
     appendKeys: ['jokes'],
@@ -224,7 +225,7 @@ function Simulator() {
       <div className="pills" style={{ marginBottom: 18 }}>
         {SCENARIOS.map((s) => (
           <button key={s.id} className={`pill ${s.id === sid ? 'active' : ''}`} onClick={() => setSid(s.id)}>
-            {s.icon} {s.name}
+            <Icon name={s.icon} size={15} /> {s.name}
           </button>
         ))}
       </div>
@@ -280,7 +281,7 @@ function Simulator() {
           <AnimatePresence>
             {waiting && (
               <motion.div className="interrupt-box" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }}>
-                <b style={{ color: 'var(--amber)' }}>⏸ __interrupt__</b>
+                <b>⏸ __interrupt__</b>
                 <div className="state-box" style={{ margin: '10px 0', maxHeight: 140 }}>{JSON.stringify(cur.step.interrupt, null, 2)}</div>
                 <div className="row">
                   <button className="btn btn-sm btn-primary" onClick={() => resume('approve')}>✓ Command(resume="approve")</button>
@@ -497,12 +498,12 @@ function Builder() {
           </div>
           {warnings.length > 0 ? (
             <div className="callout warn" style={{ margin: 0 }}>
-              <div className="ci">⚠️</div>
+              <div className="ci"><Icon name="TriangleAlert" size={16} /></div>
               <div style={{ fontSize: '0.85rem' }}>{warnings.map((w) => <div key={w}>{w}</div>)}</div>
             </div>
           ) : (
             <div className="callout tip" style={{ margin: 0 }}>
-              <div className="ci">✅</div>
+              <div className="ci"><Icon name="CircleCheck" size={16} /></div>
               <div style={{ fontSize: '0.85rem' }}>Graph looks valid: every node is reachable and END can be reached.</div>
             </div>
           )}
@@ -524,8 +525,8 @@ export default function Playground() {
         sub="Step through simulated LangGraph executions with checkpoints, human interrupts and time travel — or design your own graph and get the code."
       />
       <div className="pills" style={{ marginBottom: 26 }}>
-        <button className={`pill ${tab === 'sim' ? 'active' : ''}`} onClick={() => setTab('sim')}>🎬 Execution simulator</button>
-        <button className={`pill ${tab === 'build' ? 'active' : ''}`} onClick={() => setTab('build')}>🧱 Graph builder</button>
+        <button className={`pill ${tab === 'sim' ? 'active' : ''}`} onClick={() => setTab('sim')}><Icon name="Clapperboard" size={15} /> Execution simulator</button>
+        <button className={`pill ${tab === 'build' ? 'active' : ''}`} onClick={() => setTab('build')}><Icon name="Blocks" size={15} /> Graph builder</button>
       </div>
       {tab === 'sim' ? <Simulator /> : <Builder />}
       <Callout type="info" title="About the simulator">

@@ -5,6 +5,7 @@ import { PATTERNS } from '../data/patterns'
 import { GRAPHS } from '../data/graphs'
 import Graph3D, { Legend, edgeKey, type NodeKind } from '../components/Graph3D'
 import CodeBlock from '../components/CodeBlock'
+import Icon from '../components/Icon'
 import { SectionHead, GlowCard } from '../components/Reveal'
 import Callout from '../components/Callout'
 
@@ -60,9 +61,9 @@ export default function Patterns() {
           <GlowCard
             key={p.id}
             onClick={() => nav(`/patterns/${p.id}`)}
-            style={{ padding: 16, cursor: 'pointer', borderColor: p.id === pattern.id ? 'rgba(167,139,250,0.7)' : undefined, background: p.id === pattern.id ? 'rgba(167,139,250,0.1)' : undefined }}
+            style={{ padding: 16, cursor: 'pointer', borderColor: p.id === pattern.id ? 'rgba(255,255,255,0.7)' : undefined, background: p.id === pattern.id ? 'rgba(255,255,255,0.1)' : undefined }}
           >
-            <div style={{ fontSize: '1.5rem' }}>{p.icon}</div>
+            <div style={{ marginBottom: 8 }}><Icon name={p.icon} size={20} /></div>
             <b style={{ fontSize: '0.95rem' }}>{p.name}</b>
             <div className="dim" style={{ fontSize: '0.75rem' }}>{p.category}</div>
           </GlowCard>
@@ -75,7 +76,7 @@ export default function Patterns() {
             <span className="tag violet">{pattern.category}</span>
           </div>
           <h2 style={{ fontSize: '2.2rem' }}>
-            {pattern.icon} {pattern.name}
+            {pattern.name}
           </h2>
           <p className="section-sub" style={{ marginBottom: 24 }}>{pattern.summary}</p>
 
@@ -92,25 +93,25 @@ export default function Patterns() {
 
           <div className="grid grid-2" style={{ marginTop: 24 }}>
             <div className="card">
-              <h3>⚙️ How it works</h3>
+              <h3>How it works</h3>
               <ol className="muted" style={{ paddingLeft: 20, margin: 0 }}>
                 {pattern.how.map((h) => <li key={h} style={{ marginBottom: 6 }}>{h}</li>)}
               </ol>
             </div>
             <div className="card">
-              <h3>🎯 Use it when</h3>
+              <h3>Use it when</h3>
               <ul className="muted" style={{ paddingLeft: 20, margin: 0 }}>
                 {pattern.useWhen.map((h) => <li key={h} style={{ marginBottom: 6 }}>{h}</li>)}
               </ul>
             </div>
-            <div className="card" style={{ borderColor: 'rgba(52,211,153,0.3)' }}>
-              <h3 style={{ color: 'var(--green)' }}>✓ Strengths</h3>
+            <div className="card" style={{ borderColor: 'rgba(255,255,255,0.3)' }}>
+              <h3>+ Strengths</h3>
               <ul className="muted" style={{ paddingLeft: 20, margin: 0 }}>
                 {pattern.pros.map((h) => <li key={h} style={{ marginBottom: 6 }}>{h}</li>)}
               </ul>
             </div>
-            <div className="card" style={{ borderColor: 'rgba(251,113,133,0.3)' }}>
-              <h3 style={{ color: 'var(--red)' }}>✗ Trade-offs</h3>
+            <div className="card" style={{ borderColor: 'rgba(255,255,255,0.3)' }}>
+              <h3>− Trade-offs</h3>
               <ul className="muted" style={{ paddingLeft: 20, margin: 0 }}>
                 {pattern.cons.map((h) => <li key={h} style={{ marginBottom: 6 }}>{h}</li>)}
               </ul>

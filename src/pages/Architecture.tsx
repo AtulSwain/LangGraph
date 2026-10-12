@@ -8,6 +8,7 @@ import Graph3D from '../components/Graph3D'
 import { GRAPHS } from '../data/graphs'
 import Reveal, { SectionHead } from '../components/Reveal'
 import CodeBlock from '../components/CodeBlock'
+import Icon from '../components/Icon'
 import Callout from '../components/Callout'
 
 interface Layer {
@@ -25,7 +26,7 @@ const LAYERS: Layer[] = [
     id: 'models',
     name: 'Models & Integrations',
     sub: 'The raw capabilities',
-    color: '#64748b',
+    color: '#8a8a8a',
     pkg: 'langchain-anthropic, langchain-openai, langchain-postgres, …',
     items: ['Chat models (Anthropic, OpenAI, Google, Mistral, Ollama…)', 'Embedding models', 'Vector stores (pgvector, Pinecone, Chroma…)', 'External APIs & tools'],
     desc: 'The foundation: LLM providers, embeddings, databases and APIs. LangChain wraps hundreds of them in standard interfaces, so you can swap providers with one line.',
@@ -34,7 +35,7 @@ const LAYERS: Layer[] = [
     id: 'core',
     name: 'LangChain Core',
     sub: 'Shared abstractions',
-    color: '#60a5fa',
+    color: '#d0d0d0',
     pkg: 'langchain-core · @langchain/core',
     items: ['Runnable interface (invoke / stream / batch)', 'Messages (Human, AI, Tool, System)', 'Prompt templates', 'Tool & retriever interfaces', 'Callbacks / tracing hooks'],
     desc: 'Lightweight base package that defines the common language every component speaks. LangGraph nodes, LangChain chains and integrations all interoperate through it.',
@@ -43,28 +44,28 @@ const LAYERS: Layer[] = [
     id: 'langchain',
     name: 'LangChain',
     sub: 'Components & high-level agents',
-    color: '#34d399',
+    color: '#f2f2f2',
     pkg: 'langchain · langchain-community',
-    items: ['create_agent + middleware (v1)', 'LCEL chains (prompt | model | parser)', 'Retrievers, text splitters, loaders', 'Structured output helpers'],
+    items: ['create_agent + middleware (v1)', 'Deep Agents harness (deepagents)', 'LCEL chains (prompt | model | parser)', 'Retrievers, text splitters, loaders', 'MCP adapters & structured output'],
     desc: 'Batteries-included components and a high-level agent API. In v1, LangChain agents run on the LangGraph runtime, so you get persistence, streaming and HITL for free.',
   },
   {
     id: 'langgraph',
     name: 'LangGraph',
     sub: 'Orchestration runtime',
-    color: '#a78bfa',
+    color: '#e8e8e8',
     pkg: 'langgraph · @langchain/langgraph',
     items: ['StateGraph & Functional API', 'Pregel execution engine (super-steps)', 'Checkpointers & Store', 'interrupt / Command / Send', 'Prebuilt: ToolNode, create_react_agent'],
     desc: 'The low-level orchestration layer: models your app as a stateful graph, executes it durably, and exposes persistence, memory, HITL and streaming as primitives.',
   },
   {
     id: 'platform',
-    name: 'Deployment (LangGraph Platform)',
-    sub: 'Run agents at scale',
-    color: '#f472b6',
+    name: 'LangSmith Deployment',
+    sub: 'Run agents at scale (formerly LangGraph Platform)',
+    color: '#d6d6d6',
     pkg: 'langgraph-cli · langgraph-sdk · LangGraph Server',
-    items: ['LangGraph Server (threads, runs, crons, webhooks)', 'Task queue & horizontal scaling', 'LangGraph Studio (visual debugger)', 'SDKs + React useStream', 'Cloud, hybrid or self-hosted'],
-    desc: 'Production infrastructure for long-running, stateful agents: an opinionated API server with persistence, background runs, double-texting strategies and a visual IDE. Now offered as part of LangSmith (“LangSmith Deployment”).',
+    items: ['LangGraph Server (threads, runs, crons, webhooks)', 'Task queue & horizontal scaling', 'LangSmith Studio (visual debugger)', 'SDKs + React useStream', 'Cloud, hybrid or self-hosted'],
+    desc: 'Production infrastructure for long-running, stateful agents: an opinionated API server with persistence, background runs, double-texting strategies and a visual IDE. Renamed from LangGraph Platform to LangSmith Deployment in October 2025.',
   },
 ]
 
@@ -72,7 +73,7 @@ const LANGSMITH: Layer = {
   id: 'langsmith',
   name: 'LangSmith',
   sub: 'Observe · Evaluate · Improve',
-  color: '#fbbf24',
+  color: '#c2c2c2',
   pkg: 'langsmith SDK (framework-agnostic)',
   items: ['Tracing of every node, LLM & tool call', 'Datasets & evaluations (LLM-as-judge, trajectory)', 'Prompt hub & playground', 'Monitoring, dashboards, alerts', 'Annotation queues'],
   desc: 'A vertical pillar across the whole stack: traces anything (LangChain, LangGraph, or plain code via @traceable / OpenTelemetry) and turns traces into datasets and evaluations.',
@@ -196,7 +197,7 @@ const PREGEL_STEPS = [
   { step: 3, phase: 'Done', nodes: ['__end__'], edges: [edgeKey('d', '__end__')], channel: '["A", "B", "C", "D"]', note: 'No more nodes are triggered → the run halts and returns the final state.' },
 ]
 
-const PHASE_COLORS: Record<string, string> = { Input: '#34d399', Plan: '#60a5fa', Execute: '#a78bfa', Update: '#fbbf24', Done: '#fb7185' }
+const PHASE_COLORS: Record<string, string> = { Input: '#f2f2f2', Plan: '#d0d0d0', Execute: '#e8e8e8', Update: '#c2c2c2', Done: '#9a9a9a' }
 
 function PregelVisualizer() {
   const [i, setI] = useState(0)
@@ -219,7 +220,7 @@ function PregelVisualizer() {
       <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
         <div className="row">
           {['Plan', 'Execute', 'Update'].map((p) => (
-            <span key={p} className="tag" style={s.phase === p ? { color: '#0a0a18', background: PHASE_COLORS[p], borderColor: PHASE_COLORS[p] } : {}}>
+            <span key={p} className="tag" style={s.phase === p ? { color: '#000000', background: PHASE_COLORS[p], borderColor: PHASE_COLORS[p] } : {}}>
               {p}
             </span>
           ))}
@@ -251,12 +252,12 @@ function PregelVisualizer() {
 }
 
 const LIFECYCLE = [
-  { icon: '💻', t: 'Client', d: 'Your app / SDK / useStream posts a run to a thread.' },
-  { icon: '🌐', t: 'LangGraph Server', d: 'Validates, assigns a run id, applies double-texting strategy.' },
-  { icon: '📬', t: 'Task queue', d: 'Run is queued; any worker can pick it up.' },
-  { icon: '⚙️', t: 'Worker → Pregel', d: 'Loads the latest checkpoint and executes super-steps.' },
-  { icon: '🗄️', t: 'Checkpointer DB', d: 'Each super-step persisted (Postgres). Store for long-term memory.' },
-  { icon: '📡', t: 'Stream back', d: 'Events streamed to the client via SSE; traces to LangSmith.' },
+  { icon: 'Monitor', t: 'Client', d: 'Your app / SDK / useStream posts a run to a thread.' },
+  { icon: 'Globe', t: 'LangGraph Server', d: 'Validates, assigns a run id, applies double-texting strategy.' },
+  { icon: 'Inbox', t: 'Task queue', d: 'Run is queued; any worker can pick it up.' },
+  { icon: 'Cpu', t: 'Worker → Pregel', d: 'Loads the latest checkpoint and executes super-steps.' },
+  { icon: 'Database', t: 'Checkpointer DB', d: 'Each super-step persisted (Postgres). Store for long-term memory.' },
+  { icon: 'Radar', t: 'Stream back', d: 'Events streamed to the client via SSE; traces to LangSmith.' },
 ]
 
 export default function Architecture() {
@@ -371,7 +372,7 @@ graph.invoke({"aggregate": []})
           {LIFECYCLE.map((s, i) => (
             <Reveal key={s.t} delay={i * 0.08}>
               <div className="card" style={{ height: '100%', textAlign: 'center' }}>
-                <div style={{ fontSize: '2rem' }}>{s.icon}</div>
+                <div className="icon-badge" style={{ margin: '0 auto 12px' }}><Icon name={s.icon} size={20} /></div>
                 <div className="mono dim" style={{ fontSize: '0.72rem' }}>STEP {i + 1}</div>
                 <b>{s.t}</b>
                 <p className="muted" style={{ fontSize: '0.88rem', margin: '8px 0 0' }}>{s.d}</p>
@@ -390,7 +391,7 @@ graph.invoke({"aggregate": []})
         <div className="grid grid-2">
           <Reveal>
             <div className="card" style={{ height: '100%' }}>
-              <h3>🧵 Thread = timeline of checkpoints</h3>
+              <h3>Thread — a timeline of checkpoints</h3>
               <div className="row" style={{ gap: 6, margin: '18px 0' }}>
                 {['cp-0\ninput', 'cp-1\nagent', 'cp-2\ntools', 'cp-3\nagent', 'cp-4\n⏸ interrupt'].map((c, i) => (
                   <div key={c} className="row" style={{ gap: 6 }}>
@@ -404,7 +405,7 @@ graph.invoke({"aggregate": []})
           </Reveal>
           <Reveal delay={0.1}>
             <div className="card" style={{ height: '100%' }}>
-              <h3>🗄️ Store = shared long-term memory</h3>
+              <h3>Store — shared long-term memory</h3>
               <div className="state-box" style={{ margin: '18px 0' }}>
 {`("memories", "user-ada")
   ├─ "food"   → {"fact": "vegetarian"}

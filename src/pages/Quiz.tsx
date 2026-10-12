@@ -6,13 +6,14 @@ import { Link } from 'react-router-dom'
 import * as THREE from 'three'
 import { QUIZ } from '../data/quiz'
 import { SectionHead } from '../components/Reveal'
+import Icon from '../components/Icon'
 import { SceneLights } from '../components/Graph3D'
 
 const RANKS = [
-  { min: 0, name: 'Node Novice', color: '#94a3b8', note: 'Every graph starts at START. Revisit the Foundations module and try again!' },
-  { min: 0.5, name: 'Edge Explorer', color: '#60a5fa', note: 'Solid basics. Review persistence and human-in-the-loop to level up.' },
-  { min: 0.75, name: 'State Strategist', color: '#a78bfa', note: 'Impressive! You understand how LangGraph really works.' },
-  { min: 0.9, name: 'Graph Architect', color: '#fbbf24', note: 'Outstanding. You’re ready to design production multi-agent systems.' },
+  { min: 0, name: 'Node Novice', color: '#a3a3a3', note: 'Every graph starts at START. Revisit the Foundations module and try again!' },
+  { min: 0.5, name: 'Edge Explorer', color: '#d0d0d0', note: 'Solid basics. Review persistence and human-in-the-loop to level up.' },
+  { min: 0.75, name: 'State Strategist', color: '#e8e8e8', note: 'Impressive! You understand how LangGraph really works.' },
+  { min: 0.9, name: 'Graph Architect', color: '#c2c2c2', note: 'Outstanding. You’re ready to design production multi-agent systems.' },
 ]
 
 function Trophy({ color }: { color: string }) {
@@ -106,7 +107,7 @@ export default function Quiz() {
                 ))}
                 {picked !== null && (
                   <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className={`callout ${picked === q.answer ? 'tip' : 'warn'}`}>
-                    <div className="ci">{picked === q.answer ? '🎉' : '📘'}</div>
+                    <div className="ci"><Icon name={picked === q.answer ? 'CircleCheck' : 'BookOpen'} size={16} /></div>
                     <div>
                       <strong>{picked === q.answer ? 'Correct!' : 'Not quite.'}</strong>
                       <div className="muted">{q.explain}</div>

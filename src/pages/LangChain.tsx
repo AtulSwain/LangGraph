@@ -2,21 +2,22 @@ import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import CodeBlock from '../components/CodeBlock'
+import Icon from '../components/Icon'
 import Callout from '../components/Callout'
 import Reveal, { GlowCard, SectionHead } from '../components/Reveal'
 
 const FAMILY = [
-  { icon: '🦜', name: 'LangChain', color: '#34d399', role: 'Components & agents', text: 'Standard interfaces for 1000+ integrations (models, vector stores, tools) plus a high-level create_agent API with middleware. Fastest way to get started.' },
-  { icon: '🕸️', name: 'LangGraph', color: '#a78bfa', role: 'Orchestration runtime', text: 'Low-level framework for stateful, durable, controllable agents as graphs. Persistence, HITL, streaming, memory, multi-agent.' },
-  { icon: '🔭', name: 'LangSmith', color: '#fbbf24', role: 'Observability & evals', text: 'Trace, debug, evaluate and monitor any LLM app (framework-agnostic). Datasets, LLM-as-judge, prompt hub, dashboards.' },
-  { icon: '☁️', name: 'Deployment', color: '#f472b6', role: 'Run at scale', text: 'LangGraph Server, Studio, CLI & SDKs (the “LangGraph Platform”, now offered within LangSmith) for long-running, stateful agents in production.' },
+  { icon: 'Link2', name: 'LangChain', color: '#f2f2f2', role: 'Components & agents', text: 'Standard interfaces for 1000+ integrations (models, vector stores, tools) plus a high-level create_agent API with middleware. Fastest way to get started.' },
+  { icon: 'Network', name: 'LangGraph', color: '#e8e8e8', role: 'Orchestration runtime', text: 'Low-level framework for stateful, durable, controllable agents as graphs. Persistence, HITL, streaming, memory, multi-agent.' },
+  { icon: 'Telescope', name: 'LangSmith', color: '#c2c2c2', role: 'Observability & evals', text: 'Trace, debug, evaluate and monitor any LLM app (framework-agnostic). Datasets, LLM-as-judge, prompt hub, dashboards.' },
+  { icon: 'Cloud', name: 'Deployment', color: '#d6d6d6', role: 'Run at scale', text: 'LangSmith Deployment (formerly LangGraph Platform): LangGraph Server, LangSmith Studio, CLI & SDKs for long-running, stateful agents in production.' },
 ]
 
 const BLOCKS = [
   {
     id: 'models',
     title: 'Chat models',
-    icon: '💬',
+    icon: 'MessageSquare',
     text: 'One interface for every provider. init_chat_model lets you switch providers with a string. All chat models are Runnables: invoke, stream, batch, plus bind_tools and with_structured_output.',
     code: {
       python: `from langchain.chat_models import init_chat_model
@@ -42,7 +43,7 @@ console.log(reply.content);`,
   {
     id: 'prompts',
     title: 'Prompts & LCEL',
-    icon: '🧾',
+    icon: 'FileText',
     text: 'Prompt templates fill variables into messages. LCEL (LangChain Expression Language) pipes runnables together with | — the result is itself a runnable with streaming and batching built in.',
     code: {
       python: `from langchain_core.prompts import ChatPromptTemplate
@@ -73,7 +74,7 @@ await chain.invoke({ topic: "graphs", audience: "10-year-old", question: "What i
   {
     id: 'structured',
     title: 'Structured output',
-    icon: '🧱',
+    icon: 'Braces',
     text: 'Make the model return typed data validated against a schema. Indispensable for routers, graders and extraction nodes in LangGraph.',
     code: {
       python: `from pydantic import BaseModel, Field
@@ -99,7 +100,7 @@ const t = await llm.withStructuredOutput(Ticket).invoke("Charged twice, fix it T
   {
     id: 'tools',
     title: 'Tools',
-    icon: '🛠️',
+    icon: 'Wrench',
     text: 'Any function can become a tool. The schema the model sees comes from type hints and the docstring. Bind tools to a model to enable tool calling.',
     code: {
       python: `from langchain_core.tools import tool
@@ -118,7 +119,7 @@ print(msg.tool_calls)
   {
     id: 'rag',
     title: 'Retrieval (RAG)',
-    icon: '📚',
+    icon: 'Library',
     text: 'Loaders, splitters, embeddings and vector stores turn documents into a retriever — a runnable that returns relevant chunks for a query.',
     code: {
       python: `from langchain_community.document_loaders import WebBaseLoader
@@ -138,7 +139,7 @@ answer = (prompt | llm).invoke({"context": context, "question": "Refund policy?"
   {
     id: 'agents',
     title: 'Agents & middleware',
-    icon: '🤖',
+    icon: 'Bot',
     text: 'LangChain v1’s create_agent builds a tool-calling agent on the LangGraph runtime. Middleware hooks run before/after model and tool calls — e.g. summarize long histories or require human approval for risky tools.',
     code: {
       python: `from langchain.agents import create_agent
@@ -171,10 +172,10 @@ function Decider() {
   const answered = QUESTIONS.every((q) => a[q.key] !== undefined)
   let rec = { title: '', text: '', icon: '' }
   if (answered) {
-    if (!a.loops && !a.control && !a.durable && !a.multi) rec = { icon: '🦜', title: 'LangChain chain (or plain code)', text: 'A single LLM call or a linear pipeline (RAG, extraction, summarization). Use LCEL or a simple function — no graph needed.' }
-    else if (a.loops && !a.control && !a.multi) rec = { icon: '🤖', title: 'LangChain create_agent (prebuilt)', text: 'A standard tool-calling agent covers this. It runs on LangGraph, so checkpointers and interrupts still work. Add middleware for HITL or summarization.' }
-    else if (a.multi) rec = { icon: '👥', title: 'LangGraph multi-agent', text: 'Use LangGraph subgraphs with a supervisor or swarm (langgraph-supervisor / langgraph-swarm), with Command-based handoffs.' }
-    else rec = { icon: '🕸️', title: 'Custom LangGraph StateGraph', text: 'You need explicit state, routing and persistence. Build a StateGraph (or Functional API workflow) with a checkpointer.' }
+    if (!a.loops && !a.control && !a.durable && !a.multi) rec = { icon: 'Link2', title: 'LangChain chain (or plain code)', text: 'A single LLM call or a linear pipeline (RAG, extraction, summarization). Use LCEL or a simple function — no graph needed.' }
+    else if (a.loops && !a.control && !a.multi) rec = { icon: 'Bot', title: 'LangChain create_agent (prebuilt)', text: 'A standard tool-calling agent covers this. It runs on LangGraph, so checkpointers and interrupts still work. Add middleware for HITL or summarization.' }
+    else if (a.multi) rec = { icon: 'Users', title: 'LangGraph multi-agent', text: 'Use LangGraph subgraphs with a supervisor or swarm (langgraph-supervisor / langgraph-swarm), with Command-based handoffs.' }
+    else rec = { icon: 'Network', title: 'Custom LangGraph StateGraph', text: 'You need explicit state, routing and persistence. Build a StateGraph (or Functional API workflow) with a checkpointer.' }
   }
   return (
     <div className="grid grid-2" style={{ alignItems: 'start' }}>
@@ -196,10 +197,10 @@ function Decider() {
         <button className="btn btn-sm btn-ghost" onClick={() => setA({})}>Reset</button>
       </div>
       <AnimatePresence mode="wait">
-        <motion.div key={rec.title || 'none'} initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} className="card" style={{ minHeight: 220, borderColor: answered ? 'rgba(167,139,250,0.5)' : undefined }}>
+        <motion.div key={rec.title || 'none'} initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} className="card" style={{ minHeight: 220, borderColor: answered ? 'rgba(255,255,255,0.5)' : undefined }}>
           {answered ? (
             <>
-              <div style={{ fontSize: '2.6rem' }}>{rec.icon}</div>
+              <div className="icon-badge"><Icon name={rec.icon} size={22} /></div>
               <span className="tag violet">Recommendation</span>
               <h3 style={{ marginTop: 12, fontSize: '1.5rem' }}>{rec.title}</h3>
               <p className="muted">{rec.text}</p>
@@ -208,7 +209,7 @@ function Decider() {
           ) : (
             <div className="muted" style={{ display: 'grid', placeItems: 'center', height: '100%', textAlign: 'center' }}>
               <div>
-                <div style={{ fontSize: '2.6rem' }}>🧭</div>
+                <div className="icon-badge" style={{ margin: '0 auto 12px' }}><Icon name="Compass" size={22} /></div>
                 Answer the four questions to get a recommendation.
               </div>
             </div>
@@ -233,7 +234,7 @@ export default function LangChain() {
         {FAMILY.map((f, i) => (
           <Reveal key={f.name} delay={i * 0.06}>
             <GlowCard style={{ height: '100%', borderTop: `2px solid ${f.color}` }}>
-              <div style={{ fontSize: '2rem' }}>{f.icon}</div>
+              <div className="icon-badge"><Icon name={f.icon} size={20} /></div>
               <h3 style={{ marginTop: 8 }}>{f.name}</h3>
               <span className="tag" style={{ color: f.color, borderColor: `${f.color}66` }}>{f.role}</span>
               <p className="muted" style={{ marginTop: 12, marginBottom: 0, fontSize: '0.93rem' }}>{f.text}</p>
@@ -283,14 +284,14 @@ export default function LangChain() {
         <div className="pills" style={{ marginBottom: 20 }}>
           {BLOCKS.map((x) => (
             <button key={x.id} className={`pill ${b === x.id ? 'active' : ''}`} onClick={() => setB(x.id)}>
-              {x.icon} {x.title}
+              <Icon name={x.icon} size={15} /> {x.title}
             </button>
           ))}
         </div>
         <AnimatePresence mode="wait">
           <motion.div key={block.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
             <div className="card">
-              <h3>{block.icon} {block.title}</h3>
+              <h3 className="row" style={{ gap: 10 }}><Icon name={block.icon} size={20} /> {block.title}</h3>
               <p className="muted" style={{ margin: 0 }}>{block.text}</p>
             </div>
             <CodeBlock code={block.code} />

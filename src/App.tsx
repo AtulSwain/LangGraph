@@ -11,6 +11,11 @@ const Playground = lazy(() => import('./pages/Playground'))
 const LangChain = lazy(() => import('./pages/LangChain'))
 const Quiz = lazy(() => import('./pages/Quiz'))
 const Glossary = lazy(() => import('./pages/Glossary'))
+const Projects = lazy(() => import('./pages/Projects'))
+const Models = lazy(() => import('./pages/Models'))
+const Compare = lazy(() => import('./pages/Compare'))
+const Interview = lazy(() => import('./pages/Interview'))
+const Resources = lazy(() => import('./pages/Resources'))
 const NotFound = lazy(() => import('./pages/NotFound'))
 
 export default function App() {
@@ -38,6 +43,12 @@ export default function App() {
               <Route path="/langchain" element={<LangChain />} />
               <Route path="/quiz" element={<Quiz />} />
               <Route path="/glossary" element={<Glossary />} />
+              <Route path="/projects" element={<Projects />} />
+              <Route path="/projects/:id" element={<Projects />} />
+              <Route path="/models" element={<Models />} />
+              <Route path="/compare" element={<Compare />} />
+              <Route path="/interview" element={<Interview />} />
+              <Route path="/resources" element={<Resources />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </motion.div>
