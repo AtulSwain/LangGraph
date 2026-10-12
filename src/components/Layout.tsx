@@ -2,6 +2,7 @@ import { NavLink, Link, useLocation, useNavigate } from 'react-router-dom'
 import { AnimatePresence, motion, useScroll, useSpring } from 'framer-motion'
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import Icon from './Icon'
+import Contact, { CONTACT_EMAIL } from './Contact'
 import { CONCEPTS } from '../data/concepts'
 import { PATTERNS } from '../data/patterns'
 import { PROJECTS } from '../data/projects'
@@ -256,6 +257,7 @@ export function Footer() {
   return (
     <footer className="footer">
       <div className="container">
+        <Contact />
         <div className="footer-big serif">
           Think in <i>graphs.</i>
         </div>
@@ -267,6 +269,9 @@ export function Footer() {
             <p style={{ maxWidth: 380 }}>
               An independent, interactive study guide to LangGraph and the LangChain ecosystem. Not affiliated with LangChain, Inc. APIs move fast — always confirm details in the official docs.
             </p>
+            <p style={{ maxWidth: 380 }}>
+              <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+            </p>
           </div>
           {GROUPS.map((g) => (
             <div key={g.label}>
@@ -276,6 +281,10 @@ export function Footer() {
               ))}
             </div>
           ))}
+        </div>
+        <div className="footer-bottom">
+          <span>© {new Date().getFullYear()} LangGraph Universe</span>
+          <span className="edu-note">For educational purposes only.</span>
         </div>
       </div>
     </footer>
