@@ -1,6 +1,73 @@
+<div align="center">
+
 # LangGraph Universe
 
-An interactive, 3D study guide to **LangGraph** and the **LangChain** ecosystem — built with React.
+**An interactive, 3D study guide to LangGraph and the LangChain ecosystem.**
+
+[**Live site →**](https://atulswain.github.io/LangGraph/) &nbsp;·&nbsp; [Study Guide](https://atulswain.github.io/LangGraph/learn/) &nbsp;·&nbsp; [Projects](https://atulswain.github.io/LangGraph/projects/) &nbsp;·&nbsp; [Playground](https://atulswain.github.io/LangGraph/playground/)
+
+![React](https://img.shields.io/badge/React-18-000?logo=react&logoColor=fff)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-000?logo=typescript&logoColor=fff)
+![three.js](https://img.shields.io/badge/three.js-3D-000?logo=threedotjs&logoColor=fff)
+![Vite](https://img.shields.io/badge/Vite-5-000?logo=vite&logoColor=fff)
+![Lessons](https://img.shields.io/badge/lessons-47-000)
+![For education](https://img.shields.io/badge/purpose-educational-000)
+
+<br />
+
+<a href="https://atulswain.github.io/LangGraph/"><img src="docs/screenshots/home.jpg" alt="LangGraph Universe home page with a 3D graph of glowing nodes" width="100%" /></a>
+
+</div>
+
+## Screenshots
+
+<table>
+  <tr>
+    <td width="50%">
+      <a href="https://atulswain.github.io/LangGraph/learn/send/"><img src="docs/screenshots/study-guide.jpg" alt="Study Guide lesson page with a sidebar of modules and progress tracking" /></a>
+      <p align="center"><b>Study Guide</b><br />47 lessons in 9 modules, with progress tracking</p>
+    </td>
+    <td width="50%">
+      <a href="https://atulswain.github.io/LangGraph/learn/send/"><img src="docs/screenshots/lesson-3d.jpg" alt="Animated 3D map-reduce graph above a Python code example" /></a>
+      <p align="center"><b>3D diagrams + code</b><br />Python and TypeScript examples in every lesson</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <a href="https://atulswain.github.io/LangGraph/architecture/"><img src="docs/screenshots/architecture.jpg" alt="3D stack of the LangChain ecosystem layers" /></a>
+      <p align="center"><b>Architecture 3D</b><br />Click through the LangChain ecosystem stack</p>
+    </td>
+    <td width="50%">
+      <a href="https://atulswain.github.io/LangGraph/patterns/supervisor/"><img src="docs/screenshots/patterns.jpg" alt="Supervisor multi-agent pattern animated in 3D" /></a>
+      <p align="center"><b>Agent Patterns</b><br />12 architectures animated step by step</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <a href="https://atulswain.github.io/LangGraph/playground/"><img src="docs/screenshots/playground.jpg" alt="Playground simulator paused at a human approval interrupt" /></a>
+      <p align="center"><b>Playground</b><br />Simulate runs, approve interrupts, time-travel</p>
+    </td>
+    <td width="50%">
+      <a href="https://atulswain.github.io/LangGraph/projects/"><img src="docs/screenshots/projects.jpg" alt="Grid of six LangGraph project cards" /></a>
+      <p align="center"><b>Projects</b><br />Six complete, runnable agents</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <a href="https://atulswain.github.io/LangGraph/models/"><img src="docs/screenshots/models.jpg" alt="3D orbit of LLM providers around a graph core" /></a>
+      <p align="center"><b>Models</b><br />Pick the right model for every node</p>
+    </td>
+    <td width="50%">
+      <img src="docs/screenshots/search.jpg" alt="Command palette searching for memory across lessons, projects and terms" />
+      <p align="center"><b>⌘K search</b><br />Find any lesson, pattern, project or term</p>
+    </td>
+  </tr>
+</table>
+
+<p align="center">
+  <img src="docs/screenshots/mobile.jpg" alt="Home page on a phone" width="280" />
+  <br /><b>Works on mobile</b>
+</p>
 
 ## What's inside
 
@@ -35,7 +102,7 @@ A black-and-white, editorial design with 3D visualizations throughout, ⌘K sear
 
 ```bash
 npm install
-npm run dev       # http://localhost:5173
+npm run dev       # http://localhost:5173/LangGraph/
 npm run build     # production build in dist/
 npm run preview   # serve the production build
 ```
@@ -53,8 +120,14 @@ src/
                 interview, resources), graphs.ts (3D presets), quiz.ts, glossary.ts
   pages/        Home, Learn, Projects, Interview, Quiz, Architecture, Patterns, Playground, Models,
                 LangChain, Compare, Resources, Glossary
+docs/
+  screenshots/  Images used in this README
 ```
 
 To add a lesson, append an entry to `src/data/conceptsExtra.ts`; to add a 3D diagram, add a preset to `src/data/graphs.ts` and reference it via `diagram`.
 
-> This is an independent learning resource, not affiliated with LangChain, Inc. APIs evolve quickly — check the official docs for the latest details.
+## Contact
+
+Questions or suggestions? Email **[dev.swainatul@gmail.com](mailto:dev.swainatul@gmail.com)** or use the contact form at the bottom of any page on the site.
+
+> **For educational purposes only.** This is an independent learning resource, not affiliated with LangChain, Inc. APIs evolve quickly — check the official docs for the latest details.
