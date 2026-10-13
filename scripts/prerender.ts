@@ -40,6 +40,15 @@ const pages: Page[] = [
   ...PROJECTS.map((p) => ({ path: `/projects/${p.id}/`, title: `${p.title} — LangGraph Project | ${BRAND}`, description: p.summary })),
 ]
 
+// Tells search engines the site name and which image is its logo (home page only).
+const STRUCTURED_DATA = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    { '@type': 'WebSite', name: BRAND, alternateName: 'LangGraph Universe study guide', url: SITE + '/' },
+    { '@type': 'Organization', name: BRAND, url: SITE + '/', logo: SITE + '/icon-512.png', email: 'dev.swainatul@gmail.com' },
+  ],
+}
+
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 
 const template = readFileSync(join(DIST, 'index.html'), 'utf8')
@@ -57,7 +66,13 @@ function render(page: Page, { noindex = false } = {}) {
     `<meta property="og:title" content="${esc(page.title)}" />`,
     `<meta property="og:description" content="${esc(desc)}" />`,
     `<meta property="og:url" content="${esc(url)}" />`,
-    `<meta name="twitter:card" content="summary" />`,
+    `<meta property="og:image" content="${SITE}/og-image.png" />`,
+    `<meta property="og:image:width" content="1200" />`,
+    `<meta property="og:image:height" content="630" />`,
+    `<meta property="og:image:alt" content="LangGraph Universe — build agents that think in graphs" />`,
+    `<meta name="twitter:card" content="summary_large_image" />`,
+    `<meta name="twitter:image" content="${SITE}/og-image.png" />`,
+    page.path === '/' ? `<script type="application/ld+json">${JSON.stringify(STRUCTURED_DATA)}</script>` : '',
     noindex ? `<meta name="robots" content="noindex" />` : '',
   ]
     .filter(Boolean)
